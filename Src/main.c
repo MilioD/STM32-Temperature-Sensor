@@ -95,6 +95,7 @@ void DMA_Init(uint32_t *dest_addr) {
 	DMA2_Stream0->M0AR |= (&(*dest_addr)<<0); // Set the destination memory location of data transfer
 	DMA2_Stream0->CR |= (1<<8); // Set Circular mode enabled
 	DMA2_Stream0->CR |= (1<<11); // Set Peripheral data width to half-word(16-bit)
+	DMA2_Stream0->CR |= (1<<13); // Set Memory data width to half-word(16-bit)
 	DMA2_Stream0->CR |= (1<<10); // Set Memory Increment mode enable
 
 	// Clear interrupt event flags
