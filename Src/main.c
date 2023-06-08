@@ -65,7 +65,6 @@ void ADC_Init() {
 
 	ADC1->CR1 |= (3<<24); // Set resolution to 12-bit
 	ADC1->CR2 |= (1<<8); // Enable DMA mode
-	ADC1->CR2 |= (1<<1); // Enable continuous conversion mode. Disable for single conversion mode
 	ADC1->CR2 &= ~(1<<11); // Set right data alignment
 	ADC1->CR2 |= (6<<24); // External event selection set to TIM2 TRGO event trigger
 	ADC1->CR2 |= (1<<28); // Conversion on external event enabled Trigger detection on rising edge
