@@ -51,9 +51,9 @@ int main(void)
 void GPIO_Init() {
 	RCC->AHB1ENR |= (1<<0); // Enable GPIOA RCC Clock
 
-	GPIO->MODER |= (3<<0); // Set ADC_IN0 (pin PA0) GPIO mode to Analog mode
-	GPIO->OTYPER &= ~(1<<0); // Set GPIO pin to output push-pull type state
-	GPIO->OSPEEDR &= ~(3<<0); // Set GPIO output to low speed
+	GPIOA->MODER |= (3<<0); // Set ADC_IN0 (pin PA0) GPIO mode to Analog mode
+	GPIOA->OTYPER &= ~(1<<0); // Set GPIO pin to output push-pull type state
+	GPIOA->OSPEEDR &= ~(3<<0); // Set GPIO output to low speed
 
 }
 
@@ -63,12 +63,11 @@ void ADC_Init() {
 	RCC->CFGR |= (4<<13); // Set PCLK2 (APB2) Clock pre-scaler to 2: 180MHz/2 = 90MHz (ADCCLK & PCLK2)
 	ADC->CCR |= (2<<16); // Set ADCCLK (ADC) Clock pre-scaler to 8: 90MHz/6 = 15 MHz (ADCCLK)
 
-//	ADC1->CR1 |= (1<<8); // Enable scan mode
 	ADC1->CR1 |= (3<<24); // Set resolution to 12-bit
 	ADC1->CR2 |= (1<<8); // Enable DMA mode
-	ADC1->CR2 |= (1<<1); // Enable continuous conversion mode Disable for single conversion mode
+	ADC1->CR2 |= (1<<1); // Enable continuous conversion mode. Disable for single conversion mode
 	ADC1->CR2 &= ~(1<<11); // Set right data alignment
-	ADC1->CR2 |= (9<<24); // External event selection set to TIM4 CC4 (CH4) event trigger
+	ADC1->CR2 |= (6<<24); // External event selection set to TIM2 TRGO event trigger
 	ADC1->CR2 |= (1<<28); // Conversion on external event enabled Trigger detection on rising edge
 
 	ADC1->SMPR2 |= (7<<0); // Set sampling size to 480 cycles for channel 0: 1/15MHz = 66.66ns | 480*66.66 = 32us
@@ -98,12 +97,14 @@ void DMA_Init(uint32_t *dest_addr) {
 	DMA2_Stream0->CR |= (1<<8); // Set Circular mode enabled
 	DMA2_Stream0->CR |= (1<<11); // Set Peripheral data width to half-word(16-bit)
 	DMA2_Stream0->CR |= (1<<10); // Set Memory Increment mode enable
+
 	// Clear interrupt event flags
 	DMA2->LIFCR |= (1<<0);
 	DMA2->LIFCR |= (1<<2);
 	DMA2->LIFCR |= (1<<3);
 	DMA2->LIFCR |= (1<<4);
 	DMA2->LIFCR |= (1<<5);
+
 	// Set Interrupt event enable
 	DMA2_Stream0->CR |= (1<<4);
 	DMA2_Stream0->CR |= (1<<3);
